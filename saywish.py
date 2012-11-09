@@ -12,7 +12,6 @@ app.config.from_object(__name__)
 def get_wishes():
 	print "getting ids"
 	ids = request.args['items']
-	print ids
 	website = request.args['weburl']
 	print "going to scrapedoc"
 	beautiful = scrapedoc.choose_price(website, ids)
