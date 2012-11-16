@@ -4,11 +4,21 @@
 </head>
 <body>
  <div id="add-item">
- 	{% for k in beautiful %}
- 		your item is: {{ beautiful[k] }}
- 		id: {{ k }}
- 	{% endfor %}
- 	<img src="/static/img/{{ website }}" alt="jacket">
+ 	<select name="mydropdown">
+ 		{% for k in beautiful %}
+ 			{% for specific in beautiful[k] %}
+				<option value="{{ k }} "> {{ specific }} </option>
+			{% endfor %}
+		{% endfor %}
+	</select>
+	<select name="mydropdown">
+ 		{% for k in prices %}
+ 			{% for specific in prices[k] %}
+				<option value="{{ k }} "> {{ specific }} </option>
+			{% endfor %}
+		{% endfor %}
+	</select>
+ 	<img src="/static/img/productImage" alt="jacket">
 <p>hey hey hey</p>
 </div>
 </body>

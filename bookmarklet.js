@@ -18,15 +18,47 @@ click_listener = addEventListener('click', function(){
   			success: alert('success'),
   			dataType: 'jsonp'
 		});
+		window.open('http://127.0.0.1:5000/get_wishes/?items='+encodeURIComponent(items)+'&weburl='+encodeURIComponent(document.URL), 
+						"myWindow", 
+						"status = 1, height = 300, width = 300, resizable = 0");
 	};
 });
 var mouse_listener = document.addEventListener('mouseover', function(evt) {
 	if (capturing) {
 		saywish_item = evt.target;
-		items.push(saywish_item.getAttribute('id'));
+		items.push(saywish_item.getAttribute('class'));
 		console.log('adding item')
 	}
 });
+
+//issue with searching children of div with classes that it's searching for
+// var jQueryLib = document.createElement("script");
+// jQueryLib.src = "http://code.jquery.com/jquery-1.6.1.min.js";
+// document.body.appendChild(jQueryLib);
+// var items = [];
+// var click_listener;
+// var capturing = false;
+// var click_time = 1;
+
+// click_listener = addEventListener('click', function(){
+// 	capturing = !capturing;
+// 	click_time = click_time + 1;
+// 	if (click_time===3){
+// 		$.ajax({
+//   			type: 'POST',
+//   			url: 'http://127.0.0.1:5000/get_wishes/?items='+encodeURIComponent(items)+'&weburl='+encodeURIComponent(document.URL),
+//   			success: alert('success'),
+//   			dataType: 'jsonp'
+// 		});
+// 	};
+// });
+// var mouse_listener = document.addEventListener('mouseover', function(evt) {
+// 	if (capturing) {
+// 		saywish_item = evt.target;
+// 		items.push(saywish_item.getAttribute('class'));
+// 		console.log('adding item')
+// 	}
+// });
 
 
 

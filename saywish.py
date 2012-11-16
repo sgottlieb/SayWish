@@ -14,7 +14,8 @@ def get_wishes():
 	website = request.args['weburl']
 	beautiful = scrapedoc.first_time(website, ids)
 	images = scrapedoc.find_images(website)
-	return render_template("get_wish.html", beautiful = beautiful, images = images, website = website)
+	prices = scrapedoc.find_best_price_div(website, ids)
+	return render_template("get_wish.html", beautiful = beautiful, images = images, website = website, prices = prices)
 
 
 if __name__ == "__main__":
