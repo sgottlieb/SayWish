@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% for item in items %}
+		<p>this is the brand {{item.brand}}</p>
+		<p> this is the group: {{ item.group }}</p>
+		<p> this is the price:  {{ item.price }}</p>
+		<a href="{{ item.url }}">buy it here</a>
+	{% endfor %}
+{% endblock %}

@@ -3,25 +3,35 @@ import urllib, cStringIO
 from bs4 import BeautifulSoup
 from PIL import Image
 from StringIO import StringIO
+from model import SESSION as db_session
+import model
 import os
 import requests
 import unittest
 import re
+## MAKE THIS SHORTER --NOT IN
+unwanted_titles = ['Shop', 'Clothing', 'Shoe', 'Bag', 'Accessories',
+'Designer', 'Exclusives', 'Workwear', 'Wedding', 'Basic', 'Essentials','Denim', 'Dresses', 
+'Leather', 'Legging', 'Lingerie', 'Maternity', 'Pant', 'Short', 'Skirt', 'Suit',
+'Swimwear', 'Top', 'Vest', 'Boot','Pump', 'Sandal','Backpacks','Clutch', 'Cosmetic',  'Pouches','Satchel', 
+'Tote', 'Wallet', 'Accessories', 'Jewelry', 'Belt', 'Book',  'Eyewear', 'Glove', 'Hair','Hat',
+'Hosiery', 'Keychain', 'Product', 'Tech', 'Umbrella','Sale', 'Lookbook',  'Account', 'Order',  'shipping', 'zipcode', 'ground shipping', "what's new", "wish list", 
+'holiday', 'jacket' 'coat', 'New ', "Editor",'Holiday Gift Boutique', 'Clothing', 'Denim',
+'Dresses', 'Romper','Boutiques',  'Leather', 'Leggings', 'Lingerie', 
+'Loungewear','Yoga', 'Maternity', 'Pants', 'Shorts', 'Skirts', 'Gifts', 'Hosiery', 'Keychain', 
+'Scarves', 'Wrap', 'Percent', 'Feature','Shopbop', 'Account', 'Order', 'Review', 'List' ]
 
-unwanted_titles = ['Shop All', 'Clothing', 'Shoes', 'Bags', 'Accessories', 'Designer Boutique', 
-'Designers', 'Designer Exclusives', 'My Designers', 'Boutiques', 'Designer Boutique', 
-'Workwear Boutique', 'Wedding Boutique', 'Basic Essentials', 'Clothing', 'Denim', 'Dresses', 
-'Leather', 'Leggings', 'Lingerie', 'Maternity', 'Pants', 'Shorts', 'Skirts', 'Suit Separates', 
-'Swimwear', 'Tops', 'Vests', 'Shoes', 'Shop All', 'Booties', 'Boots', 'Designer Boutique', 'Flats', 
-'Pumps', 'Sandals', 'Sport', 'Bags', 'Shop All', 'Baby Bags', 'Backpacks', 'Beach Bags', 
-'Black Handbags', 'Clutches', 'Cosmetic Pouches', 'Designer Boutique', 'Hobos', 'Satchels', 
-'Shoulder Bags', 'Totes', 'Wallets', 'Weekend Bags', 'Accessories', 'Jewelry', 'Belts', 'Books', 
-'Designer Boutique', 'Eyewear', 'Gloves', 'Hair Accessories', 'Hats', 'Hosiery', 'Keychains', 
-'Product Care', 'Tech Accessories', 'Umbrellas', 'Watches', 'Winter Accessories', 'Sale', 
-'Shop All', 'Clothing', 'Bags', 'Shoes', 'Accessories', 'Designer Boutique', 'Lookbooks', 
-'Fashion Features', 'Latest Lookbook', 'My Shopbop', 'Account', 'Orders', 'My Designers', 
-'My', 'My Reviews', 'shipping', 'zipcode', 'ground shipping']
+def get_host(url):
+	host_name = re.search('http://\w+.(\w+).', str(url)).group(1)
+	return host_name
 
+def check_host(url):
+	host_name = get_host(url)
+	in_db = model.Website.search(host_name)
+	if in_db:
+		return in_db
+	else: 
+		return None
 
 def open_site(url):
 	webpage = urlopen(url)
@@ -29,8 +39,8 @@ def open_site(url):
 	webpage.close()
 	return soup
 
-def split_class(url, classes):
-	soup = open_site(url)
+
+def split_class(classes):
 	class_list = []
 	classes = classes.split(',')
 	for specific_class in classes:
@@ -38,9 +48,9 @@ def split_class(url, classes):
 			class_list.append(specific_class)
 	return class_list
 
-def first_time(url, classes):
+def first_time(url, class_list):
 	best_div = {}
-	class_list = split_class(url, classes)
+	# class_list = split_class(url, classes)
 	title_list = []
 	soup = open_site(url)
 	for specific_class in class_list:
@@ -52,24 +62,24 @@ def first_time(url, classes):
 
 def get_titles(product, specific_class):
 	title_list = []
-	title_matches = re.finditer(">\s*?(\w\w+\s*?\w*?)\s*?<", str(product))
+	title_matches = re.finditer(">\s*(\w+?.*?\w*?)\s*<", str(product))
 	titles = [match_obj.group(1) for match_obj in title_matches]
 	for title in titles:
-		print title
 		if wanted_title(title) and title not in title_list:
 			title_list.append(title)
 	return title_list
 
 def wanted_title(title):
 	for unwanted in unwanted_titles:
-		if title.lower() == unwanted.lower():
+		if unwanted.lower() in title.lower():
 			return False
 	return True
 
-def find_best_price_div(url, classes):
+
+## FIX PRICE BUG, NOT IN THE RIGHT LOOP
+def find_best_price_div(url, class_list):
 	similar_price = []
 	price_divs = {}
-	class_list = split_class(url, classes)
 	soup = open_site(url)
 	for specific_class in class_list:
 		product = soup.select(".%s" % (specific_class))
@@ -86,7 +96,6 @@ def find_prices(product, specific_class):
 	price_list = []
 	for price_type in price_options:
 		prices = re.findall("%s" %(price_type), str(product))
-		print prices
 		for price in prices:
 			if price not in price_list and price:
 				price_list.append(price)
@@ -103,7 +112,7 @@ def find_images(url):
 			resp = requests.get("%(src)s" % image)
 			i = Image.open(StringIO(resp.content))
 			if i.size[0] > 200 and i.size[1] > 200:
-				img_id = image['id']
+				# img_id = image['id']
 				i.save('./static/img/productImage' , 'jpeg')
-				images[image['id']]= i 
+				# images[image['id']]= i 
 	return images

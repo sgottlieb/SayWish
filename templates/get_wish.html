@@ -1,26 +1,48 @@
 <!doctype html>
 <head>
 	<title>WishList App</title>
+	<script src="../static/javascript/jquery-1.7.2.js"></script>
+	<script src="../static/javascript/get_wish.js"></script>
 </head>
 <body>
- <div id="add-item">
- 	<select name="mydropdown">
- 		{% for k in beautiful %}
- 			{% for specific in beautiful[k] %}
-				<option value="{{ k }} "> {{ specific }} </option>
+<form method= "POST" action= "{{ url_for('newitem')}}">
+	<input type="hidden" name="specific_url" value="{{ website }}">
+	<input type="hidden" name="host" value="{{ host }}">
+
+ 	<div id="add-item">
+	 	<select name="brandname" id = "brandname" onchange="check_value(this.value, 'brandname_other')">
+	 		{% for k in brand %}
+	 			{% for specific in brand[k] %}
+					<option value="{{ k, specific }} "> {{ specific }} </option>
+				{% endfor %}
 			{% endfor %}
-		{% endfor %}
-	</select>
-	<select name="mydropdown">
- 		{% for k in prices %}
- 			{% for specific in prices[k] %}
-				<option value="{{ k }} "> {{ specific }} </option>
+			<option value="other">Other</option>
+		</select>
+		<input type ="text" name="brandname_other" id="brandname_other" style='display:none;'>
+	    
+		<select name="price" id = "price" onchange="check_value(this.value, 'price_other')">
+	 		{% for k in prices %}
+	 			{% for specific in prices[k] %}
+					<option value="{{ k, specific }} "> {{ specific }} </option>
+				{% endfor %}
 			{% endfor %}
-		{% endfor %}
-	</select>
- 	<img src="/static/img/productImage" alt="jacket">
-<p>hey hey hey</p>
-</div>
+			<option value="other">Other</option>
+		</select>
+		<input type ="text" name="price_other" id="price_other" style='display:none;'>
+
+		<select name="item_group" id = "item_group" onchange="check_value(this.value, 'item_group_other')">
+			{% for item_groups in groups %}
+				<option value="{{ item_groups }} "> {{ item_groups }} </option>
+			{% endfor %}
+			<option value="other">Other</option>
+		</select>
+	 	<input type ="text" name="item_group_other" id="item_group_other" style='display:none;'>
+
+	 	<img src="/static/img/productImage" alt="jacket">
+	 	<input id="button" type="submit"></input>
+
+	</div>
+</form>
 </body>
 </html>
 
