@@ -1,0 +1,60 @@
+.container {
+	width: 780px;
+	margin: 0px auto;
+	overflow: hidden;
+	font-family: 'Playfair Display SC', serif;
+
+}
+.items{
+	display:inline-block;
+	width: 163px;
+	height: 400px;
+	float: left;
+	padding: 10px;
+	background:white;
+	border: gray solid 3px;
+	margin: 3px;
+}
+.items .brand_description{
+	height:100px;
+	font-size:15px;
+}
+.items img{
+	max-width:150px;
+	max-height:200px;
+}
+.items .item_links{
+	clear:both;
+}
+h1{
+	display: inline-block;
+	position: relative;
+}
+nav li{
+	display: inline-block;
+	float:right;
+	width:100px;
+	font-size: 20px;
+}
+.heading nav{
+	position:absolute;
+	top: 15px;
+	right: 0px;
+}
+.heading{
+	position:relative;
+	font-size: 30px;
+	padding: 5px;
+	background:white;
+}
+a {
+	text-decoration: none;
+	color: black;
+
+}
+a:hover{
+	color: #FFAEB9;
+}
+p{
+	padding:3px;
+}

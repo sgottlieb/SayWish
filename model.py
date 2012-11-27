@@ -5,11 +5,14 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm import relationship, backref
 from bs4 import BeautifulSoup
+import datetime
 
 # ENGINE = None
 # SESSION = None
 
 # Base = declarative_base()
+
+today = datetime.datetime.now()
 
 engine = create_engine("sqlite:///wishlists.db", echo=False)
 SESSION = scoped_session(sessionmaker(bind= engine, autocommit= False, autoflush = False))
@@ -21,9 +24,9 @@ class Wishlist(Base):
 	__tablename__="wishlists"
 	id = Column(Integer, primary_key = True)
 	user_id = Column(Integer, ForeignKey('users.id'), nullable = True)
-	item_id = Column(Integer,  nullable = True)
+	item_id = Column(Integer,  ForeignKey('items.id'),nullable = True)
 	user = relationship("User", backref = backref("wishlists", order_by = id))
-	
+	item = relationship("Item", backref = backref("wishlists", order_by = id))
 
 	def __init__(self, user_id, item_id):
 		self.user_id = user_id
@@ -37,8 +40,22 @@ class Wishlist(Base):
 
 	@classmethod
 	def search(cls, input_user_id):
-		wishlist = SESSION.query(cls).filter_by(user_id= input_user_id).all()
-		return wishlist
+		wishlist_list = SESSION.query(cls).filter_by(user_id= input_user_id).all()
+		return wishlist_list
+
+	@classmethod
+	def search_groups(cls, input_user_id):
+		group_list =[]
+		wishlist_list = Wishlist.search(input_user_id)
+		for items in wishlist_list:
+			if items.item.title not in group_list:
+				group_list.append(items.item.title)
+		return group_list
+
+	@classmethod
+	def delete(cls, input_item):
+		SESSION.query(cls).filter_by(item_id= input_item).delete()
+
 
 class User(Base):
 	__tablename__= "users"
@@ -71,21 +88,22 @@ class Item(Base):
 	price = Column(String(10), nullable = True)
 	url = Column(String(1000),nullable = True)
 	host_url = Column(String(100), nullable = True)
+	timestamp = Column(DateTime, nullable = True)
 	image = Column(String(300), nullable = True)
-	wishlist_id = Column(Integer, ForeignKey('wishlists.id'), nullable = True)
-	wishlist = relationship("Wishlist", backref = backref("items", order_by = id))
 	
-	def __init__(self, brand, title, price, url, host_url, image):
+	def __init__(self, brand, title, price, url, host_url,timestamp, image):
 		self.brand = brand
 		self.title = title
 		self.price = price
 		self.url = url
 		self.host_url = host_url
+		self.timestamp = timestamp
 		self.image = image
 
 	@classmethod
 	def new(cls, brand, title, price, url, host_url, image):
-		instance_row = cls(brand, title, price, url, host_url, image)
+		timestamp = datetime.datetime.now()
+		instance_row = cls(brand, title, price, url, host_url, timestamp, image)
 		SESSION.add(instance_row)
 		SESSION.commit()
 		return instance_row.id
@@ -94,6 +112,13 @@ class Item(Base):
 	def search(cls, input_item_id):
 		item = SESSION.query(cls).filter_by(id= input_item_id).first()
 		return item
+
+	@classmethod
+	def delete(cls, input_item_id):
+		SESSION.query(Item).filter_by(id=input_item_id).delete()
+		Wishlist.delete(input_item_id)
+		SESSION.commit()
+		return 
 
 class Website(Base):
 	__tablename__="websites"

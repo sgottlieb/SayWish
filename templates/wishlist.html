@@ -1,9 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
 	{% for item in items %}
-		<p>this is the brand {{item.brand}}</p>
-		<p> this is the group: {{ item.group }}</p>
-		<p> this is the price:  {{ item.price }}</p>
-		<a href="{{ item.url }}">buy it here</a>
+	<div class= "items">
+		<div class="brand_description">
+			<p>{{item.brand}}, {{ item.price }}</p>
+			<p> {{ item.title }}</p>
+		</div>
+		<img src= " {{ item.image }}" alt="{{item.group}}">
+		<div class="item_links">
+			<a href="{{ item.url }}">buy it here</a>
+			<a href ="{{url_for('delete_item')}}?itemid={{ item.id }}">[X]</a>
+		</div>
+	</div>
 	{% endfor %}
 {% endblock %}

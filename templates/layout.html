@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <head>
+	<link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<script type="text/javascript" src="../static/javascript/jquery-1.7.2.js"></script>
+	<script type="text/javascript" src="../static/javascript/get_wish.js"></script>
 </head>
 <body>
 	<div class= "container">
+	<div class="heading">
+		<h1>SayWish</h1>
+		<nav>
+			<li><a href= "{{ url_for('index') }}">My Wishes</a></li>
+			<li><a href= "{{ url_for('logout') }}">logout</a></li>
+		</nav>
+	</div>
 		{% block body %}
 		{% endblock %}
 	</div>

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% for group, item in item_dict.iteritems() %}
+	<a href ="{{url_for('group_items')}}?group={{ group }}">
+	<div class= "items">
+		<div class="brand_description">
+			<p>{{ item.brand}}, {{ item.price }}</p>
+			<p> {{ item.title }}</p>
+		</div>
+		<img src= " {{ item.image }}" alt="{{ item.group}}">
+	</div>
+</a>
+	{% endfor %}
+{% endblock %}
