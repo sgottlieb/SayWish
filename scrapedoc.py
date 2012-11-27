@@ -9,17 +9,19 @@ import os
 import requests
 import unittest
 import re
-## MAKE THIS SHORTER --NOT IN
+
+
 unwanted_titles = ['Shop', 'Clothing', 'Shoe', 'Bag', 'Accessories',
-'Designer', 'Exclusives', 'Workwear', 'Wedding', 'Basic', 'Essentials','Denim', 'Dresses', 
+'Designer', 'Exclusives', 'Workwear', 'Wedding',  'Essentials','Denim', 'Dresses', 
 'Leather', 'Legging', 'Lingerie', 'Maternity', 'Pant', 'Short', 'Skirt', 'Suit',
-'Swimwear', 'Top', 'Vest', 'Boot','Pump', 'Sandal','Backpacks','Clutch', 'Cosmetic',  'Pouches','Satchel', 
+'Swimwear', 'Vest', 'Boot','Pump', 'Sandal','Backpacks','Clutch', 'Cosmetic',  'Pouches','Satchel', 
 'Tote', 'Wallet', 'Accessories', 'Jewelry', 'Belt', 'Book',  'Eyewear', 'Glove', 'Hair','Hat',
-'Hosiery', 'Keychain', 'Product', 'Tech', 'Umbrella','Sale', 'Lookbook',  'Account', 'Order',  'shipping', 'zipcode', 'ground shipping', "what's new", "wish list", 
+'Hosiery', 'Keychain', 'Product', 'Tech', 'Umbrella','Sale', 'Lookbook',  'Account', 'Order',  
+'shipping', 'zipcode', 'ground shipping', "what's new", "wish list", 
 'holiday', 'jacket' 'coat', 'New ', "Editor",'Holiday Gift Boutique', 'Clothing', 'Denim',
 'Dresses', 'Romper','Boutiques',  'Leather', 'Leggings', 'Lingerie', 
 'Loungewear','Yoga', 'Maternity', 'Pants', 'Shorts', 'Skirts', 'Gifts', 'Hosiery', 'Keychain', 
-'Scarves', 'Wrap', 'Percent', 'Feature','Shopbop', 'Account', 'Order', 'Review', 'List' ]
+'Scarves', 'Wrap', 'Percent', 'Feature', 'Account', 'Order', 'Review', 'List' ]
 
 def get_host(url):
 	host_name = re.search('http://\w+.(\w+).', str(url)).group(1)
@@ -42,25 +44,26 @@ def open_site(url):
 
 def split_class(classes):
 	class_list = []
-	classes = classes.split(',')
+	print "here"
+	classes = str(classes).split(',')
 	for specific_class in classes:
 		if specific_class:
 			class_list.append(specific_class)
 	return class_list
 
-def first_time(url, class_list):
+def first_time(url, classes):
 	best_div = {}
-	# class_list = split_class(url, classes)
+	class_list = split_class(classes)
 	title_list = []
 	soup = open_site(url)
 	for specific_class in class_list:
 		product = soup.select(".%s" % (specific_class))
-		title = get_titles(product, specific_class)
+		title = get_titles(product)
 		if title:			
 			best_div[specific_class]= title
 	return best_div
 
-def get_titles(product, specific_class):
+def get_titles(product):
 	title_list = []
 	title_matches = re.finditer(">\s*(\w+?.*?\w*?)\s*<", str(product))
 	titles = [match_obj.group(1) for match_obj in title_matches]
@@ -90,6 +93,15 @@ def find_best_price_div(url, class_list):
 		price_divs[specific_class] = price_list
 	return price_divs
 
+def price_check(url, specific_class):
+	similar_price = []
+	soup = open_site(url)
+	product = soup.select(".%s" % (specific_class))
+	price_list = find_prices(product, specific_class)
+	for price in price_list:
+		if price and price not in similar_price:
+			similar_price.append(price)
+	return similar_price
 
 def find_prices(product, specific_class):
 	price_options = ["\$\d+.?\d*", "\d+.?\d*?\s?USD?"]
@@ -112,7 +124,5 @@ def find_images(url):
 			resp = requests.get("%(src)s" % image)
 			i = Image.open(StringIO(resp.content))
 			if i.size[0] > 200 and i.size[1] > 200:
-				# img_id = image['id']
 				i.save('./static/img/productImage' , 'jpeg')
-				# images[image['id']]= i 
-	return images
+				return image["src"]
