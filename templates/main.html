@@ -1,32 +1,33 @@
 {% extends "layout.html" %}
 {% block body %}
-	<div id="signup">
-	    <h2>Sign Up</h2>
-	    <form  method="POST" action="{{ url_for('newuser')}}">
-	        <div>
-	            <label for="email">Email</label>
-	            <input type="email" name="email" id="email">
-	        </div>
-	        <div>
-	            <label for="password">Password</label>
-	            <input type="password" name="password" id="password">
-	        </div>
-	            <input id = "button" type="submit"></input>
-	    </form>
-	</div>
-
-	<div id="login">
-	    <h2>Log In</h2>
-	    <form  method="POST" action="{{ url_for('login')}}">
-	        <div>
-	            <label for="email">Email</label>
-	            <input type="text" name="email" id="email">
-	        </div>
-	        <div>
-	            <label for="password">Password</label>
-	            <input type="password" name="password" id="password">
-	        </div>
-	            <input id = "button" type="submit"></input>
-	    </form>
+	<div id="signup_login">
+		<div id="login">
+		    <h2>Log In</h2>
+		    <form  method="POST" action="{{ url_for('login')}}">
+		        <div>
+		            <label class= "label_email" for="email">Email</label>
+		            <input type="text" name="email" id="email">
+		        </div>
+		        <div>
+		            <label for="password">Password</label>
+		            <input type="password" name="password" id="password">
+		        </div>
+		            <input id = "button" type="submit" value="Log in!"></input>
+		    </form>
+		</div>
+		<div id="signup">
+		    <h2>Sign Up</h2>
+		    <form  method="POST" action="{{ url_for('newuser')}}">
+		        <div>
+		            <label for="email" class= "label_email">Email</label>
+		            <input type="email" name="email" id="email">
+		        </div>
+		        <div>
+		            <label for="password">Password</label>
+		            <input type="password" name="password" id="password">
+		        </div>
+		            <input id = "button" type="submit" value="Sign Up!"></input>
+		    </form>
+		</div>
 	</div>
 {% endblock %}

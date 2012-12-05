@@ -38,7 +38,8 @@ def newuser():
 	email = request.form['email']
 	password = request.form['password']
 	user_id = model.User.new(email, password)
-	g.user_id = user_id
+	session['user_id'] = user_id
+	g.user_id = session['user_id'] 
 	return redirect("/main_wishes")
 
 @app.route('/logout')
@@ -107,14 +108,17 @@ def items():
 	items = model.Wishlist.search(g.user_id.id)
 	group_items = model.Wishlist.search_groups(g.user_id.id)
 	best_groups ={}
-	for group in group_items:
-		best_item =[1000000000, None]
-		for item in items:
-			if item.item.title == group:
-				item_price = item.item.price.split('$')
-				if best_item[0]>float(item_price[1]):
-					best_item[0], best_item[1] =float(item_price[1]), item.item
-		best_groups[group] = best_item[1]
+	if items:
+		for group in group_items:
+			best_item =[1000000000, None]
+			for item in items:
+				if item.item.title == group:
+					item_price = item.item.price.split('$')
+					if best_item[0]>float(item_price[1]):
+						best_item[0], best_item[1] =float(item_price[1]), item.item
+			best_groups[group] = best_item[1]
+	else:
+		item_dict = None
 	return render_template("main_wishlist.html", item_dict = best_groups)
 
 

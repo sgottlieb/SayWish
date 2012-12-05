@@ -3,7 +3,6 @@
 	margin: 0px auto;
 	overflow: hidden;
 	font-family: 'Playfair Display SC', serif;
-
 }
 .items{
 	display:inline-block;
@@ -57,4 +56,89 @@ a:hover{
 }
 p{
 	padding:3px;
+}
+footer{
+	height: 20px;
+}
+/*add item pop-up style*/
+#add-item{
+	overflow:hidden;
+	width: 550px;
+	border: black solid 2px;
+
+}
+#select_section{
+	overflow: hidden;
+	width: 170px;
+	padding: 5px;
+	display:inline-block;
+}
+#brandname_div{
+	width: 150px;
+	padding:5px;
+}
+#price_div{
+	width: 150px;
+	padding:5px;
+}
+#group_div{
+	width: 150px;
+	padding:5px;
+}
+#image_div{
+	display:inline-block;
+	margin: 0 auto;
+	float: right;
+	overflow: hidden;
+	width: 300px;
+	padding: 0px 30px;
+}
+#image_div img{
+	max-width: 300px;
+	max-height: 300px;
+}
+#submit_button{
+	overflow:hidden;
+	clear:both;
+	margin:5px;
+}
+#button{
+	float: right;
+	width: 100px;
+}
+select{
+	background: white;
+	width: 150px;
+	padding: 5px;
+	font-size: 12px;
+	border: 1px solid #ccc;
+	font-family: 'Playfair Display SC', serif;
+	height: 20px;
+}
+option{
+	background: white;
+	font-size: 12px;
+	border-bottom: 1px solid #ccc;
+	font-family: 'Playfair Display SC', serif;
+}
+input[type="submit"]{
+	background: white;
+	border: solid black 1px
+}
+input[type="submit"]:hover{
+	background:#FFAEB9;
+}
+
+/*login logout style*/
+#signup_login #login, #signup_login #signup{
+	width: 400px;
+	margin: 0 auto;
+	padding: 12px;
+	border-bottom: black solid 1px;
+}
+#signup_login .label_email{
+	padding-right: 36px;
+}
+#signup_login input #button{
+
 }

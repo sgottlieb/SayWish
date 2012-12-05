@@ -38,6 +38,7 @@ class Wishlist(Base):
 		SESSION.add(instance_row)
 		SESSION.commit()
 
+
 	@classmethod
 	def search(cls, input_user_id):
 		wishlist_list = SESSION.query(cls).filter_by(user_id= input_user_id).all()
@@ -72,6 +73,7 @@ class User(Base):
 		instance_row = cls(email, password)
 		SESSION.add(instance_row)
 		SESSION.commit()
+		return User.authenticate(email, password)
 		
 	@classmethod
 	def authenticate(cls, input_email, input_password):

@@ -1,54 +1,71 @@
-{% extends "layout.html" %}
-{% block body %}
+
+<!Doctype HTML>
 <head>
-	<script src="../static/javascript/get_wish.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Playfair+Display+SC' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<script type="text/javascript" src="../static/javascript/jquery-1.7.2.js"></script>
+	<script type="text/javascript" src="../static/javascript/get_wish.js"></script>
 </head>
 <body>
-	<form method= "POST" action= "{{ url_for('newitem')}}">
-		<input type="hidden" name="specific_url" value="{{ website }}">
-		<input type="hidden" name="host" value="{{ host }}">
-		<input type="hidden" name="image_src" value="{{ image_src }}">
+	<div class="container">
+		<header>
+			<h1>SayWish</h1>
+		</header>
+		<form method= "POST" action= "{{ url_for('newitem')}}">
+			<input type="hidden" name="specific_url" value="{{ website }}">
+			<input type="hidden" name="host" value="{{ host }}">
+			<input type="hidden" name="image_src" value="{{ image_src }}">
 
-	 	<div id="add-item">
-			 	<select name="brandname" id = "brandname" onchange="check_value(this.value, 'brandname_other')">
-			 		<option value="None, brandname">Brand Name</option>
-			 		{% for k in brand %}
-			 			{% for specific in brand[k] %}
-							<option value="{{ k, specific }} "> {{ specific }} </option>
-						{% endfor %}
-					{% endfor %}
-					<option value="None, other">Other</option>
-				</select>
-				<input type ="text" name="brandname_other" id="brandname_other" style='display:none;'>
-
-			<select name="price" id = "price" onchange="check_value(this.value, 'price_other')">
-				<option value="brandname">Price</option>
-		 		{% for k in prices %}
-		 			{% for specific in prices[k] %}
-						<option value="{{ k, specific }} "> {{ specific }} </option>
-					{% endfor %}
-				{% endfor %}
-				<option value="None, other">Other</option>
-			</select>
-			<input type ="text" name="price_other" id="price_other" style='display:none;'>
-
-			<select name="item_group" id = "item_group" onchange="check_value(this.value, 'item_group_other')">
-				<option value="brandname">Primary Group</option>
-				{% for item_groups in groups %}
-					<option value="{{ item_groups }}"> {{ item_groups }} </option>
-				{% endfor %}
-				<option value="Tops">Tops</option>
-				<option value="Bottoms">Bottoms</option>
-				<option value="Dresses">Dresses</option>
-				<option value="Accessories">Accessories</option>
-				<option value="None, other">Other</option>
-			</select>
-		 	<input type ="text" name="item_group_other" id="item_group_other" style='display:none;'>
-
-		 	<img src="{{ image_src}}" alt="jacket">
-		 	<input id="button" type="submit"></input>
-		</div>
-	</form>
+		 	<div id="add-item">
+		 		<div id="select_section">
+			 		<div id="brandname_div">
+					 	<select name="brandname" id = "brandname" onchange="check_value(this.value, 'brandname_other')">
+					 		<option value="None, brandname">Brand Name</option>
+					 		{% for k in brand %}
+					 			{% for specific in brand[k] %}
+									<option value="{{ k, specific }} "> {{ specific }} </option>
+								{% endfor %}
+							{% endfor %}
+							<option value="None, other">Other</option>
+						</select>
+						<input type ="text" name="brandname_other" id="brandname_other" style='display:none;'>
+					</div>
+					<div id ="price_div">
+						<select name="price" id = "price" onchange="check_value(this.value, 'price_other')">
+							<option value="brandname">Price</option>
+					 		{% for k in prices %}
+					 			{% for specific in prices[k] %}
+									<option value="{{ k, specific }} "> {{ specific }} </option>
+								{% endfor %}
+							{% endfor %}
+							<option value="None, other">Other</option>
+						</select>
+						<input type ="text" name="price_other" id="price_other" style='display:none;'>
+					</div>
+					<div id="group_div">
+						<select name="item_group" id = "item_group" onchange="check_value(this.value, 'item_group_other')">
+							<option value="brandname">Primary Group</option>
+							{% for item_groups in groups %}
+								<option value="{{ item_groups }}"> {{ item_groups }} </option>
+							{% endfor %}
+							<option value="Tops">Tops</option>
+							<option value="Bottoms">Bottoms</option>
+							<option value="Dresses">Dresses</option>
+							<option value="Accessories">Accessories</option>
+							<option value="None, other">Other</option>
+						</select>
+					 	<input type ="text" name="item_group_other" id="item_group_other" style='display:none;'>
+				    </div>
+				  </div>
+			    <div id = "image_div">
+				 	<img src="{{ image_src}}" alt="jacket">
+				 </div>
+				 <div id="submit_button">
+				 	<input id="button" type="submit" onclick="close_this_window()" value="Add Wish!"></input>
+				 </div>
+			</div>
+		</form>
+	</div>
 </body>
 </html>
-{% endblock %}
+
