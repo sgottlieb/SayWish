@@ -67,29 +67,20 @@ def get_wishes():
 
 @app.route("/add_item", methods = ["POST"])
 def newitem():
-	# getting back (div class, specific)
 	user_id = g.user_id
 	website = request.form['specific_url']
-	brand = request.form['brandname']
-	other_brand = request.form['brandname_other']
-	price = request.form['price']
-	other_price = request.form['price_other']
+	brand = (request.form['brandname'] or request.form['brandname_other']).split("|")
+	price = (request.form['price'] or request.form['price_other']).split("|")
+	item_group = request.form['item_group'] or request.form['item_group_other']
 	host = request.form['host']
-	image_src = request.form['image_src']
-	item_group = request.form['item_group']
-	if item_group =="None, other":
-		item_group = request.form['item_group_other']
-	if brand != "None, other" and price != "None, other":
-		price_info, brand_info = eval(price), eval(brand)
-	elif brand == "None, other" and price == "None, other":
-		price_info, brand_info = (None, other_price), (None, other_brand)
-	elif brand == "None, other":
-		price_info, brand_info = eval(price), (None, other_brand)
-	elif price == "None, other":
-		price_info, brand_info = (None, other_price), eval(brand)
+	image_src = request.form['image_src'] 
+	if len(brand) == 1:
+		brand =[ None, brand[0]]
+	if len(price) == 1:
+		price =[ None, price[0]]
 	if scrapedoc.check_host(website) == None:
-		model.Website.new(host, str(price_info[0]), str(brand_info[0]), None)
-	item=model.Item.new(str(brand_info[1]), item_group, str(price_info[1]), website, host, image_src)
+		model.Website.new(host, str(price[0]), str(brand[0]), None)
+	item=model.Item.new(brand[1], item_group, price[1], website, host, image_src)
 	model.Wishlist.new(user_id.id, item)
 	return redirect("/main_wishes")
 

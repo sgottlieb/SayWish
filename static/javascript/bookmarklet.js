@@ -15,7 +15,7 @@ click_listener = addEventListener('click', function(){
   			type: 'POST',
   			url: window.open('http://127.0.0.1:5000/get_wishes/?items='+encodeURIComponent(items)+'&weburl='+encodeURIComponent(document.URL), 
 						"myWindow", 
-						"status = 1, height = 300, width = 300, resizable = 0"),
+						"status = 1, height = 550, width = 650, resizable = 0"),
   			dataType: 'jsonp'
 		});
 	}
@@ -23,7 +23,7 @@ click_listener = addEventListener('click', function(){
 var mouse_listener = document.addEventListener('mouseover', function(evt) {
 	if (capturing) {
 		saywish_item = evt.target;
-		$(saywish_item).effect("highlight", {color:'#87CEFA'}, 250);
+		$(saywish_item).effect("highlight", {color:'#FFAEB9'}, 250);
 		items.push(saywish_item.getAttribute('class'));
 		console.log('adding item');
 

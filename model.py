@@ -105,6 +105,7 @@ class Item(Base):
 	@classmethod
 	def new(cls, brand, title, price, url, host_url, image):
 		timestamp = datetime.datetime.now()
+		price = price.replace(",", "")
 		instance_row = cls(brand, title, price, url, host_url, timestamp, image)
 		SESSION.add(instance_row)
 		SESSION.commit()

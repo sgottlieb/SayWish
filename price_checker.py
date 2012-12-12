@@ -14,7 +14,7 @@ def checker():
 		website = SESSION.query(Website).filter_by(hostname=item.host_url).first()
 		prices = scrapedoc.price_check(item.url, website.price_class)
 		for price in prices:
-			this_price = price.split('$')
+			this_price = price.split('$').replace(",", "")
 			item_price = item.price.split('$')
 			if float(this_price[1]) < float(item_price[1]):
 				item.price = price

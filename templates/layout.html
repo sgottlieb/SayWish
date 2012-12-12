@@ -7,13 +7,13 @@
 </head>
 <body>
 	<div class= "container">
-	<div class="heading">
+	<header>
 		<h1>SayWish</h1>
 		<nav>
 			<li><a href= "{{ url_for('index') }}">My Wishes</a></li>
 			<li><a href= "{{ url_for('logout') }}">logout</a></li>
 		</nav>
-	</div>
+	</header>
 		{% block body %}
 		{% endblock %}
 	</div>

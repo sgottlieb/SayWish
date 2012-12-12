@@ -20,13 +20,13 @@
 		 		<div id="select_section">
 			 		<div id="brandname_div">
 					 	<select name="brandname" id = "brandname" onchange="check_value(this.value, 'brandname_other')">
-					 		<option value="None, brandname">Brand Name</option>
+					 		<option value="">Brand Name</option>
 					 		{% for k in brand %}
 					 			{% for specific in brand[k] %}
-									<option value="{{ k, specific }} "> {{ specific }} </option>
+									<option value="{{ '%s| %s'%(k, specific) }}"> {{ specific }} </option>
 								{% endfor %}
 							{% endfor %}
-							<option value="None, other">Other</option>
+							<option value="">Other</option>
 						</select>
 						<input type ="text" name="brandname_other" id="brandname_other" style='display:none;'>
 					</div>
@@ -35,10 +35,11 @@
 							<option value="brandname">Price</option>
 					 		{% for k in prices %}
 					 			{% for specific in prices[k] %}
-									<option value="{{ k, specific }} "> {{ specific }} </option>
+									<option value="{{ '%s| %s'%(k, specific) }} "> {{ specific }} </option>
+									<!-- string split, take out eval and NONe, other to none -->
 								{% endfor %}
 							{% endfor %}
-							<option value="None, other">Other</option>
+							<option value="">Other</option>
 						</select>
 						<input type ="text" name="price_other" id="price_other" style='display:none;'>
 					</div>
@@ -52,7 +53,7 @@
 							<option value="Bottoms">Bottoms</option>
 							<option value="Dresses">Dresses</option>
 							<option value="Accessories">Accessories</option>
-							<option value="None, other">Other</option>
+							<option value="">Other</option>
 						</select>
 					 	<input type ="text" name="item_group_other" id="item_group_other" style='display:none;'>
 				    </div>
